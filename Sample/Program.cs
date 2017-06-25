@@ -34,9 +34,7 @@ namespace Sample
     {
         public void Run()
         {
-            BeforeRun();
             Console.WriteLine("Human Run");
-            AfterRun();
         }
         
         public void BeforeRun() => Console.WriteLine("Before Human Run");
@@ -143,13 +141,21 @@ namespace Sample
             // (大体のオブジェクトには同じ処理を適応する)
 
             // taminato:↓HumanにBeforeとAfterのメソッド追加でどう？
+            // yasutomi: せっかくだから分離してみた
             // 人間を処理する場合にはひと手間加える
             if (runnable is IHuman)
             {
-                Console.Write("人間が処理を行います: ");
-            }
+                Console.WriteLine("人間が処理を行います");
 
-            runnable.Run();
+                IHuman human = runnable as IHuman;
+                human?.BeforeRun();
+                runnable?.Run();
+                human?.AfterRun();
+            }
+            else
+            {
+                runnable?.Run();
+            }
         }
     }
 }
